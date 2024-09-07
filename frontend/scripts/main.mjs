@@ -3,6 +3,7 @@ import { word_bank } from './wordbank_fetch.mjs';
 import { get_meaning } from './meaning_fetch.mjs';
 
 let weight = [1, 4, 9, 16, 25, 36];
+let meaning_updated = false;
 let current_word = 'cook';
 
 $('#ok-btn').addEventListener('click', async () => {
@@ -22,19 +23,24 @@ async function update_word() {
     $('#word-level').textContent = `${level}`;
 
     current_word = word;
+    meaning_updated = false;
     await update_meaning(word);
 }
 
 async function update_meaning(word) {
+    if (meaning_updated) return;
+
     let is_meaning_open = $('#meaning-container').hasAttribute('open');
-    if (is_meaning_open) {
-        $('#meaning').setAttribute('aria-busy', 'true');
-        $('#meaning').innerHTML = '';
+    if (!is_meaning_open) return;
 
-        await make_meaning(word);
+    $('#meaning').setAttribute('aria-busy', 'true');
+    $('#meaning').innerHTML = '';
 
-        $('#meaning').setAttribute('aria-busy', 'false');
-    }
+    await make_meaning(word);
+    meaning_updated = true;
+
+    $('#meaning').setAttribute('aria-busy', 'false');
+
 }
 
 async function make_meaning(word) {
