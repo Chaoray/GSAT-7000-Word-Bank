@@ -62,12 +62,47 @@
           <button class="contrast" id="unfamiliar-btn">Unfamiliar</button>
         </div>
       </article>
+      <article>
+        <h2>Unfamiliar Words</h2>
+        <div id="unfamiliar-words-container">
+          <article id="level-1"><h2>Level 1</h2></article>
+          <article id="level-2"><h2>Level 2</h2></article>
+          <article id="level-3"><h2>Level 3</h2></article>
+          <article id="level-4"><h2>Level 4</h2></article>
+          <article id="level-5"><h2>Level 5</h2></article>
+          <article id="level-6"><h2>Level 6</h2></article>
+        </div>
+      </article>
     </main>
     <hr />
     <footer class="container">
+      <h1>Settings</h1>
       <article>
-        <h2>Unfamiliar Words</h2>
-        <div id="unfamiliar-words-container"></div>
+        <h2>Probability</h2>
+        <label>
+          Level 1
+          <input type="range" id="prob-level-1" min="0" max="100" value="1">
+        </label>
+        <label>
+          Level 2
+          <input type="range" id="prob-level-2" min="0" max="100" value="4">
+        </label>
+        <label>
+          Level 3
+          <input type="range" id="prob-level-3" min="0" max="100" value="9">
+        </label>
+        <label>
+          Level 4
+          <input type="range" id="prob-level-4" min="0" max="100" value="16">
+        </label>
+        <label>
+          Level 5
+          <input type="range" id="prob-level-5" min="0" max="100" value="25">
+        </label>
+        <label>
+          Level 6
+          <input type="range" id="prob-level-6" min="0" max="100" value="36">
+        </label>
       </article>
     </footer>
     <script src="scripts/main.mjs" type="module"></script>

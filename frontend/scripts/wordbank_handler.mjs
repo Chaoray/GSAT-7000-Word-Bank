@@ -1,13 +1,12 @@
-
 import { $, $make, rand_choice } from './utils.mjs';
 import { word_bank } from './wordbank_fetch.mjs';
 import { get_meaning } from './meaning_fetch.mjs';
 
 let meaning_updated = true;
 let current_word = 'cook';
+let weight = [1, 4, 9, 16, 25, 36];
 
 async function update_word() {
-    const weight = [1, 4, 9, 16, 25, 36];
     const level = rand_choice([1, 2, 3, 4, 5, 6], weight); // select level 1 to 6
     const word_bank_with_level = word_bank[level];
     const index = Math.floor(Math.random() * word_bank_with_level.length);
@@ -68,8 +67,37 @@ async function make_meaning_nodes(word) {
     }
 }
 
+function set_weight_from_userinput() {
+    for (let level = 1; level <= 6; level++) {
+        const input = $(`#prob-level-${level}`);
+        weight[level - 1] = parseInt(input.value);
+    }
+    localStorage.setItem('probability_weight', weight);
+}
+
+function get_weight_from_localstorage() {
+    let data = localStorage.getItem('probability_weight');
+    if (data === null) {
+        const default_data = JSON.stringify([1, 4, 9, 16, 25, 36]);
+        localStorage.setItem('probability_weight', default_data);
+        data = default_data;
+    }
+
+    data = JSON.parse(data);
+    weight = data;
+}
+get_weight_from_localstorage();
+
+function init_weight_input_value() {
+    for (let level = 1; level <= 6; level++) {
+        const input = $(`#prob-level-${level}`);
+        input.value = weight[level - 1];
+    }
+}
+init_weight_input_value();
 
 export {
     update_word,
-    update_meaning
+    update_meaning,
+    set_weight_from_userinput
 }
