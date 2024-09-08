@@ -1,76 +1,66 @@
-import { $, rand_choice } from './utils.mjs';
-import { word_bank } from './wordbank_fetch.mjs';
-import { get_meaning } from './meaning_fetch.mjs';
+import { $, $make } from './utils.mjs';
+import { update_word, update_meaning } from './wordbank_handler.mjs';
 
-let weight = [1, 4, 9, 16, 25, 36];
-let meaning_updated = false;
-let current_word = 'cook';
+let data = null;
 
-$('#ok-btn').addEventListener('click', async () => {
+$('#familiar-btn').addEventListener('click', async () => {
     await update_word();
 });
 
-$('#meaning-container').addEventListener('toggle', async () => {
-    update_meaning(current_word);
+$('#unfamiliar-btn').addEventListener('click', () => {
+    add_word_to_unfamiliar_list();
 });
 
-async function update_word() {
-    let level = rand_choice([1, 2, 3, 4, 5, 6], weight);
-    let word_bank_with_level = word_bank[level];
-    let index = Math.floor(Math.random() * word_bank_with_level.length);
-    let word = word_bank_with_level[index];
-    $('#word').textContent = word;
-    $('#word-level').textContent = `${level}`;
+$('#meaning-container').addEventListener('toggle', async () => {
+    await update_meaning();
+});
 
-    current_word = word;
-    meaning_updated = false;
-    await update_meaning(word);
-}
+function init_unfamiliar_list() {
+    data = localStorage.getItem('unfamiliar_words');
+    if (data === null) {
+        const default_data = JSON.stringify({ '1': [], '2': [], '3': [], '4': [], '5': [], '6': [] });
+        localStorage.setItem('unfamiliar_words', default_data);
+        data = default_data;
+    }
 
-async function update_meaning(word) {
-    if (meaning_updated) return;
+    data = JSON.parse(data);
+    let word_list = data;
 
-    let is_meaning_open = $('#meaning-container').hasAttribute('open');
-    if (!is_meaning_open) return;
-
-    $('#meaning').setAttribute('aria-busy', 'true');
-    $('#meaning').innerHTML = '';
-
-    await make_meaning(word);
-    meaning_updated = true;
-
-    $('#meaning').setAttribute('aria-busy', 'false');
-
-}
-
-async function make_meaning(word) {
-    let data = await get_meaning(word);
-    let $make = (p) => document.createElement(p);
-
-    for (let def of data['definition']) {
+    let container = $('#unfamiliar-words-container');
+    for (let level = 1; level <= 6; level++) {
         let article = $make('article');
-        let i = $make('i');
-        i.textContent = def['pos'];
-        article.appendChild(i);
+        article.id = `level-${level}`;
 
-        let ol = $make('ol');
-        let li = $make('li');
-        ol.appendChild(li);
+        let h2 = $make('h2');
+        h2.textContent = `Level ${level}`;
+        article.appendChild(h2);
 
-        let mark = $make('mark');
-        mark.textContent = def['translation'];
-        li.appendChild(mark);
-
-        for (let ex of def['example']) {
-            let p = $make('p');
-            p.textContent = ex['text'];
-            let i = $make('i');
-            i.textContent = ex['translation'];
-            p.appendChild(i);
-            li.appendChild(p);
+        for (let word of word_list[level]) {
+            let li = $make('li');
+            li.textContent = word;
+            article.appendChild(li);
         }
 
-        article.appendChild(ol);
-        $('#meaning').appendChild(article);
+        container.appendChild(article);
     }
 }
+
+function add_word_to_unfamiliar_list() {
+    if (data === null)
+        return;
+
+    let word = $('#word').textContent;
+    let level = $('#word-level').textContent;
+
+    if (data[level].includes(word))
+        return;
+
+    data[level].push(word);
+    localStorage.setItem('unfamiliar_words', JSON.stringify(data));
+
+    let li = $make('li');
+    li.textContent = word;
+    $(`#level-${level}`).appendChild(li);
+}
+
+init_unfamiliar_list();

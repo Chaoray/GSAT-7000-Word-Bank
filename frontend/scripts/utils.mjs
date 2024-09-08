@@ -1,4 +1,5 @@
 const $ = (p) => document.querySelector(p);
+const $make = (p) => document.createElement(p);
 
 function rand_choice(arr=[], weight=undefined) {
     if (weight === undefined) {
@@ -18,5 +19,6 @@ function rand_choice(arr=[], weight=undefined) {
 
 export {
     $,
+    $make,
     rand_choice
 };

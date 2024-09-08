@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="style/pico.min.css" />
-    <title>GSAT Word Bank</title>
+    <title>GSAT 7000 Word Bank</title>
   </head>
   <body>
     <header class="container">
@@ -26,7 +26,8 @@
               <ol>
                 <li>
                   <mark>做飯，烹調;燒，煮</mark>
-                  <p>I don't cook meat very often.
+                  <p>
+                    I don't cook meat very often.
                     <i>我不常煮肉吃。</i>
                   </p>
                   <p>
@@ -45,7 +46,8 @@
               <ol>
                 <li>
                   <mark>廚師</mark>
-                  <p>She's a wonderful cook.
+                  <p>
+                    She's a wonderful cook.
                     <i>她是位很出色的廚師。</i>
                   </p>
                 </li>
@@ -56,11 +58,18 @@
       </article>
       <article>
         <div class="grid">
-          <button id="ok-btn">Familiar</button>
-          <button class="contrast" id="no-btn">Unfamiliar</button>
+          <button id="familiar-btn">Familiar</button>
+          <button class="contrast" id="unfamiliar-btn">Unfamiliar</button>
         </div>
       </article>
     </main>
+    <hr />
+    <footer class="container">
+      <article>
+        <h2>Unfamiliar Words</h2>
+        <div id="unfamiliar-words-container"></div>
+      </article>
+    </footer>
     <script src="scripts/main.mjs" type="module"></script>
   </body>
 </html>
